@@ -23,6 +23,9 @@ public class ShopItem : MonoBehaviour
 
     public void BuyItem()
     {
+        if(Inventory.Instance == null)
+            Inventory.Instance.gameObject.SetActive(true);
+
         Inventory.Instance.AddInventory(itemInfo);
     }
 }

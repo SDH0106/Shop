@@ -9,16 +9,20 @@ public class Npc : MonoBehaviour
     [SerializeField] TextMeshPro npcName;
     [SerializeField] GameObject menu;
 
+    bool isMenuOpen;
+
     private void Start()
     {
         npcName.text = npcInfo.NpcName;
-        menu.SetActive(false);
+        isMenuOpen = false;
+        menu.SetActive(isMenuOpen);
     }
 
     private void OnMouseUp()
     {
         menu.transform.localPosition = transform.right * 2;
-        menu.SetActive(true);
+        isMenuOpen = !isMenuOpen;
+        menu.SetActive(isMenuOpen);
     }
 
     public void TransferNpcInfoToShop()

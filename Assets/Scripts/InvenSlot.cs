@@ -18,6 +18,9 @@ public class InvenSlot : MonoBehaviour
             itemCount.text = count.ToString();
             itemCount.gameObject.SetActive(true);
         }
+
+        else
+            itemCount.gameObject.SetActive(false);
     }
 
     public void OffSlot()
