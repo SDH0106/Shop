@@ -10,8 +10,13 @@ public class Shop : MonoBehaviour
     [SerializeField] Transform itemParent;
     [SerializeField] GameObject itemPrefab;
     [SerializeField] Text shopNpcName;
+    [SerializeField] Image sellButton;
 
     public static Shop Instance;
+
+    [HideInInspector] public bool isSell = false;
+
+    Color selectedColor = new Color(0.3f, 0.6f, 1f, 1f);
 
     private void Awake()
     {
@@ -53,5 +58,11 @@ public class Shop : MonoBehaviour
 
             }
         }
+    }
+
+    public void SellItem()
+    {
+        isSell = !isSell;
+        sellButton.color = isSell ? selectedColor : Color.white;
     }
 }

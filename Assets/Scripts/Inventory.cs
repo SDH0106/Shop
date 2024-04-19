@@ -11,8 +11,9 @@ public class Inventory : MonoBehaviour
     [SerializeField] Transform menuParent;
     [SerializeField] Transform slotParent;
     [SerializeField] GameObject[] slots;
+    public Image dragUI;
 
-    int crystalCount;
+    [HideInInspector] public int crystalCount;
 
     public static Inventory Instance;
 
@@ -25,7 +26,15 @@ public class Inventory : MonoBehaviour
     int menuNum;
     int beforeMenuNum;
 
+    int startDragIndex;
+    [HideInInspector] public int endDragIndex;
+
     Color selectedColor = new Color(0.3f, 0.6f, 1f, 1f);
+
+    SaveManager saveManager;
+
+    ItemInfo[] allItems;
+    int[] allItemCounts;
 
     private void Awake()
     {
@@ -35,6 +44,7 @@ public class Inventory : MonoBehaviour
 
     private void Start()
     {
+        saveManager = SaveManager.Instance;
         menuNum = 0;
 
         crystalCount = 67890;
@@ -56,9 +66,68 @@ public class Inventory : MonoBehaviour
         };
         selectedCounts = new int[slotParent.childCount];
 
+        allItems = new ItemInfo[slotParent.childCount * invenItems.Count];
+        allItemCounts = new int[allItems.Length];
+
         SelectWhichMenu(menuNum);
 
+        //LoadInfo();
+
+        dragUI.gameObject.SetActive(false);
         gameObject.SetActive(false);
+    }
+
+    void LoadInfo()
+    {
+        /*int count = 0;
+
+        for (int i = 0; i < allItems.Length; i++)
+        {
+            if (i < slotParent.childCount)
+                count = 0;
+
+
+            else if (i < slotParent.childCount * 2)
+                count = 1;
+
+            else
+                count = 2;
+
+            invenItems[count][i - slotParent.childCount * count] = allItems[i];
+            invenCounts[count][i - slotParent.childCount * count] = allItemCounts[i];
+        }
+*/
+
+        saveManager.LoadJsonFile();
+
+        saveManager.crystal = crystalCount;
+        crystal.text = crystalCount.ToString();
+
+        saveManager.menuIndex = menuNum;
+        SelectWhichMenu(menuNum);
+
+        for (int i = 0; i < allItems.Length; i++)
+        {
+            if (saveManager.saveItemInfos[i] != null)
+                allItems[i] = saveManager.saveItemInfos[i];
+        }
+
+        for (int i = 0; i < invenItems.Count; i++)
+        {
+            for (int j = 0; j < invenItems[i].Length; j++)
+            {
+                invenItems[i][j] = allItems[j + slotParent.childCount * i];
+            }
+        }
+    }
+
+    void SaveInfo()
+    {
+        for (int i = 0; i < invenItems.Count ; i++)
+        {
+            for (int j = 0; j < invenItems[i].Length; j++)
+                allItems[j + slotParent.childCount * i] = invenItems[i][j];
+        }
     }
 
     public void AddInventory(ItemInfo itemInfo)
@@ -101,12 +170,26 @@ public class Inventory : MonoBehaviour
         SettingInvenSlot();
     }
 
+    public void DelInventory(int indexNum)
+    {
+        crystalCount += selectedItems[indexNum].Cost;
+
+        selectedCounts[indexNum]--;
+
+        if (selectedCounts[indexNum] == 0)
+            selectedItems[indexNum] = null;
+
+        crystal.text = crystalCount.ToString();
+
+        SettingInvenSlot();
+    }
+
     public void SettingInvenSlot()
     {
         for (int i = 0; i < selectedItems.Length; i++)
         {
             if (selectedItems[i] != null)
-                slots[i].GetComponent<InvenSlot>().SettingSlotInfo(selectedItems[i].ItemImage, selectedCounts[i]);
+                slots[i].GetComponent<InvenSlot>().SettingSlotInfo(selectedItems[i], selectedCounts[i]);
 
             else
                 slots[i].GetComponent<InvenSlot>().OffSlot();
@@ -128,5 +211,34 @@ public class Inventory : MonoBehaviour
         beforeMenuNum = menuNum;
 
         SettingInvenSlot();
+    }
+
+    public void SettingDragUi(int indexNum)
+    {
+        startDragIndex = indexNum;
+        dragUI.sprite = selectedItems[indexNum].ItemImage;
+        dragUI.gameObject.SetActive(true);
+    }
+
+    public void DragEnd()
+    {
+        dragUI.gameObject.SetActive(false);
+
+        if (endDragIndex != startDragIndex)
+        {
+            ItemInfo startInfo = selectedItems[startDragIndex];
+            int startCount = selectedCounts[startDragIndex];
+
+            ItemInfo endInfo = selectedItems[endDragIndex];
+            int endCount = selectedCounts[endDragIndex];
+
+            selectedItems[endDragIndex] = startInfo;
+            selectedCounts[endDragIndex] = startCount;
+
+            selectedItems[startDragIndex] = endInfo;
+            selectedCounts[startDragIndex] = endCount;
+
+            SettingInvenSlot();
+        }
     }
 }

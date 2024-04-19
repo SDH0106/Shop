@@ -26,4 +26,14 @@ public class ItemInfo : ScriptableObject
     public Sprite CostImage => costImage;
     public int Cost => cost;
     public int MaxCount => maxCount;
+
+    public ItemInfo(Type itemType, string itemName, Sprite itemImage, Sprite costImage, int cost, int maxCount)
+    {
+        this.itemType = itemType;
+        this.itemName = itemName;
+        this.itemImage = itemImage;
+        this.costImage = costImage;
+        this.cost = cost;
+        this.maxCount = maxCount;
+    }
 }
