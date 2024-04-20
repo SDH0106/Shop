@@ -64,6 +64,7 @@ public class Inventory : MonoBehaviour
             { (int)Type.Portion, new int[slotParent.childCount] },
             { (int)Type.Etc, new int[slotParent.childCount] },
         };
+
         selectedCounts = new int[slotParent.childCount];
 
         allItems = new ItemInfo[slotParent.childCount * invenItems.Count];
@@ -232,11 +233,42 @@ public class Inventory : MonoBehaviour
             ItemInfo endInfo = selectedItems[endDragIndex];
             int endCount = selectedCounts[endDragIndex];
 
-            selectedItems[endDragIndex] = startInfo;
-            selectedCounts[endDragIndex] = startCount;
+            if (startInfo != endInfo)
+            {
+                selectedItems[endDragIndex] = startInfo;
+                selectedCounts[endDragIndex] = startCount;
 
-            selectedItems[startDragIndex] = endInfo;
-            selectedCounts[startDragIndex] = endCount;
+                selectedItems[startDragIndex] = endInfo;
+                selectedCounts[startDragIndex] = endCount;
+            }
+
+            else
+            {
+                int totalCount = startCount + endCount;
+
+                if(totalCount <= startInfo.MaxCount)
+                {
+                    selectedItems[startDragIndex] = null;
+                    selectedCounts[startDragIndex] = 0;
+
+                    selectedCounts[endDragIndex] = totalCount;
+                }
+
+                else
+                {
+                    if (selectedCounts[endDragIndex] != selectedItems[endDragIndex].MaxCount && selectedCounts[startDragIndex] != selectedItems[startDragIndex].MaxCount)
+                    {
+                        selectedCounts[endDragIndex] = selectedItems[endDragIndex].MaxCount;
+                        selectedCounts[startDragIndex] = totalCount - selectedCounts[endDragIndex];
+                    }
+
+                    else
+                    {
+                        selectedCounts[endDragIndex] = startCount;
+                        selectedCounts[startDragIndex] = endCount;
+                    }
+                }
+            }
 
             SettingInvenSlot();
         }

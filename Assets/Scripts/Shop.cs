@@ -24,13 +24,13 @@ public class Shop : MonoBehaviour
             Instance = this;
     }
 
-    public void SettingShopInfo(int count, string name, ItemInfo[] itemInfo)
+    public void SettingShopInfo(int listCount, string name, ItemInfo[] itemInfo)
     {
         shopNpcName.text = name;
 
-        if (itemParent.childCount <= count)
+        if (itemParent.childCount <= listCount)
         {
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < listCount; i++)
             {
                 if (i < itemParent.childCount)
                 {
@@ -50,7 +50,7 @@ public class Shop : MonoBehaviour
         {
             for (int i = 0; i < itemParent.childCount; i++)
             {
-                if (i < count)
+                if (i < listCount)
                     itemParent.GetChild(i).GetComponent<ShopItem>().Setting(itemInfo[i]);
 
                 else
