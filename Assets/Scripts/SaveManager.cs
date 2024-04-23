@@ -25,7 +25,7 @@ public class SaveManager : MonoBehaviour
     public SaveData[] saveDatas;
     public int crystal;
     public int menuIndex;
-    public ItemInfo[] saveItemInfos;
+    [HideInInspector] public ItemInfo[] saveItemInfos;
 
     public static SaveManager Instance;
 
@@ -33,6 +33,12 @@ public class SaveManager : MonoBehaviour
     {
         if(Instance == null)
             Instance = this;
+    }
+
+    private void OnApplicationQuit()
+    {
+        Inventory inven = Inventory.Instance;
+        inven.SaveInfo();
     }
 
     class SaveJson
@@ -59,7 +65,7 @@ public class SaveManager : MonoBehaviour
 
     SaveData[] GetItemArray(ItemInfo[] saveItems, int[] saveItemCounts)
     {
-        SaveData[] saveData = new SaveData[saveItems.Length * 3];
+        SaveData[] saveData = new SaveData[saveItems.Length];
 
         for (int i = 0; i < saveData.Length; i++)
         {
@@ -78,9 +84,9 @@ public class SaveManager : MonoBehaviour
         sw.Close();
     }
 
-    public void LoadJsonFile()
+    public void LoadJsonFile(ItemInfo[] saveItems, int[] saveItemCounts)
     {
-        string json = LoadFile("ItemSaveData");
+        string json = LoadFile("ItemSaveData", saveItems, saveItemCounts);
 
         if (json != null)
         {
@@ -107,16 +113,17 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    string LoadFile(string fileName) 
+    string LoadFile(string fileName, ItemInfo[] saveItems, int[] saveItemCounts) 
     {
         string path = string.Format("{0}/{1}.txt", Application.dataPath, fileName);
 
-        if (File.Exists(path))
-            MakeJsonFile(0, 0, null, null);
+        if (!File.Exists(path))
+            MakeJsonFile(10000, 0, saveItems, saveItemCounts);
 
         StreamReader sr = new StreamReader(path);
+        string readToEnd = sr.ReadToEnd();
         sr.Close();
-        return sr.ReadToEnd();
+        return readToEnd;
     }
 
     /*[SerializeField] ItemInfo[] itemInfos;

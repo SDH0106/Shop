@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KeyboardInteraction : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     Inventory inventory;
 
@@ -15,5 +15,6 @@ public class KeyboardInteraction : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.I))
             inventory.gameObject.SetActive(!inventory.gameObject.activeSelf);
+
     }
 }

@@ -45,10 +45,10 @@ public class Inventory : MonoBehaviour
     private void Start()
     {
         saveManager = SaveManager.Instance;
-        menuNum = 0;
+        //menuNum = 0;
 
-        crystalCount = 67890;
-        crystal.text = crystalCount.ToString();
+        //crystalCount = 67890;
+        //crystal.text = crystalCount.ToString();
 
         invenItems = new Dictionary<int, ItemInfo[]>()
         {
@@ -70,9 +70,9 @@ public class Inventory : MonoBehaviour
         allItems = new ItemInfo[slotParent.childCount * invenItems.Count];
         allItemCounts = new int[allItems.Length];
 
-        SelectWhichMenu(menuNum);
+        //SelectWhichMenu(menuNum);
 
-        //LoadInfo();
+        LoadInfo();
 
         dragUI.gameObject.SetActive(false);
         gameObject.SetActive(false);
@@ -99,18 +99,20 @@ public class Inventory : MonoBehaviour
         }
 */
 
-        saveManager.LoadJsonFile();
+        saveManager.LoadJsonFile(allItems, allItemCounts);
 
-        saveManager.crystal = crystalCount;
+        crystalCount = saveManager.crystal;
         crystal.text = crystalCount.ToString();
 
-        saveManager.menuIndex = menuNum;
-        SelectWhichMenu(menuNum);
+        menuNum = saveManager.menuIndex;
 
         for (int i = 0; i < allItems.Length; i++)
         {
             if (saveManager.saveItemInfos[i] != null)
+            {
                 allItems[i] = saveManager.saveItemInfos[i];
+                allItemCounts[i] = saveManager.saveDatas[i].equipItemCount;
+            }
         }
 
         for (int i = 0; i < invenItems.Count; i++)
@@ -118,17 +120,25 @@ public class Inventory : MonoBehaviour
             for (int j = 0; j < invenItems[i].Length; j++)
             {
                 invenItems[i][j] = allItems[j + slotParent.childCount * i];
+                invenCounts[i][j] = allItemCounts[j + slotParent.childCount * i];
             }
         }
+
+        SelectWhichMenu(menuNum);
     }
 
-    void SaveInfo()
+    public void SaveInfo()
     {
         for (int i = 0; i < invenItems.Count ; i++)
         {
             for (int j = 0; j < invenItems[i].Length; j++)
+            {
                 allItems[j + slotParent.childCount * i] = invenItems[i][j];
+                allItemCounts[j + slotParent.childCount * i] = invenCounts[i][j];
+            }
         }
+
+        saveManager.MakeJsonFile(crystalCount, menuNum, allItems, allItemCounts);
     }
 
     public void AddInventory(ItemInfo itemInfo)
@@ -194,6 +204,8 @@ public class Inventory : MonoBehaviour
 
             else
                 slots[i].GetComponent<InvenSlot>().OffSlot();
+
+            //Debug.Log(selectedItems[i]);
         }
     }
 
