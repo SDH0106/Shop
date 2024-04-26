@@ -55,7 +55,6 @@ public class Shop : MonoBehaviour
 
                 else
                     itemParent.GetChild(i).gameObject.SetActive(false);
-
             }
         }
     }

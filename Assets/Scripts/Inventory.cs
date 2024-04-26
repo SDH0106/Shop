@@ -45,10 +45,6 @@ public class Inventory : MonoBehaviour
     private void Start()
     {
         saveManager = SaveManager.Instance;
-        //menuNum = 0;
-
-        //crystalCount = 67890;
-        //crystal.text = crystalCount.ToString();
 
         invenItems = new Dictionary<int, ItemInfo[]>()
         {
@@ -70,8 +66,6 @@ public class Inventory : MonoBehaviour
         allItems = new ItemInfo[slotParent.childCount * invenItems.Count];
         allItemCounts = new int[allItems.Length];
 
-        //SelectWhichMenu(menuNum);
-
         LoadInfo();
 
         dragUI.gameObject.SetActive(false);
@@ -80,25 +74,6 @@ public class Inventory : MonoBehaviour
 
     void LoadInfo()
     {
-        /*int count = 0;
-
-        for (int i = 0; i < allItems.Length; i++)
-        {
-            if (i < slotParent.childCount)
-                count = 0;
-
-
-            else if (i < slotParent.childCount * 2)
-                count = 1;
-
-            else
-                count = 2;
-
-            invenItems[count][i - slotParent.childCount * count] = allItems[i];
-            invenCounts[count][i - slotParent.childCount * count] = allItemCounts[i];
-        }
-*/
-
         saveManager.LoadJsonFile(allItems, allItemCounts);
 
         crystalCount = saveManager.crystal;
@@ -204,8 +179,6 @@ public class Inventory : MonoBehaviour
 
             else
                 slots[i].GetComponent<InvenSlot>().OffSlot();
-
-            //Debug.Log(selectedItems[i]);
         }
     }
 
