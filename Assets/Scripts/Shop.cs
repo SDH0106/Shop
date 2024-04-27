@@ -24,6 +24,11 @@ public class Shop : MonoBehaviour
             Instance = this;
     }
 
+    private void Start()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void SettingShopInfo(int listCount, string name, ItemInfo[] itemInfo)
     {
         shopNpcName.text = name;
