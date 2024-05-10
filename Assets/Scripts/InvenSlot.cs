@@ -83,7 +83,7 @@ public class InvenSlot : MonoBehaviour
     {
         if (isDrag)
         {
-            inventory.DragEnd();
+            inventory.MoveItem();
             isDrag = false;
         }
     }

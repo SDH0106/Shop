@@ -64,6 +64,12 @@ public class Shop : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        if (isSell)
+            SellItem();
+    }
+
     public void SellItem()
     {
         isSell = !isSell;

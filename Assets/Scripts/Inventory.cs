@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -118,35 +116,18 @@ public class Inventory : MonoBehaviour
 
     public void AddInventory(ItemInfo itemInfo)
     {
-        bool isSame = false;
         int typeNum = (int)itemInfo.ItemType;
-        int emptyArray = invenItems[typeNum].Length;
 
-        for (int i = 0; i < invenItems[typeNum].Length; i++)
+        if (!CheckSameItemInInven(typeNum, itemInfo))
         {
-            if (emptyArray == invenItems[typeNum].Length)
+            for (int i = 0; i < invenItems[typeNum].Length; i++)
             {
                 if (invenItems[typeNum][i] == null)
-                    emptyArray = i;
-            }
-
-            if (invenItems[typeNum][i] == itemInfo)
-            {
-                if (invenCounts[typeNum][i] < itemInfo.MaxCount)
                 {
-                    isSame = true;
-                    invenCounts[typeNum][i]++;
+                    invenItems[typeNum][i] = itemInfo;
+                    invenCounts[typeNum][i] = 1;
                     break;
                 }
-            }
-        }
-
-        if (!isSame)
-        {
-            if (emptyArray != invenItems[typeNum].Length)
-            {
-                invenItems[typeNum][emptyArray] = itemInfo;
-                invenCounts[typeNum][emptyArray] = 1;
             }
         }
 
@@ -154,6 +135,20 @@ public class Inventory : MonoBehaviour
         crystal.text = crystalCount.ToString();
 
         SettingInvenSlot();
+    }
+
+    bool CheckSameItemInInven(int typeNum, ItemInfo itemInfo)
+    {
+        for (int i = 0; i < invenItems[typeNum].Length; i++)
+        {
+            if (invenItems[typeNum][i] == itemInfo && invenCounts[typeNum][i] < itemInfo.MaxCount)
+            {
+                invenCounts[typeNum][i]++;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void DelInventory(int indexNum)
@@ -174,11 +169,14 @@ public class Inventory : MonoBehaviour
     {
         for (int i = 0; i < selectedItems.Length; i++)
         {
-            if (selectedItems[i] != null)
+            if (selectedItems[i] != null || selectedCounts[i] != 0)
                 slots[i].GetComponent<InvenSlot>().SettingSlotInfo(selectedItems[i], selectedCounts[i]);
 
             else
+            {
+                selectedItems[i] = null;
                 slots[i].GetComponent<InvenSlot>().OffSlot();
+            }
         }
     }
 
@@ -206,7 +204,7 @@ public class Inventory : MonoBehaviour
         dragUI.gameObject.SetActive(true);
     }
 
-    public void DragEnd()
+    public void MoveItem()
     {
         dragUI.gameObject.SetActive(false);
 
@@ -231,7 +229,7 @@ public class Inventory : MonoBehaviour
             {
                 int totalCount = startCount + endCount;
 
-                if(totalCount <= startInfo.MaxCount)
+                if (totalCount <= startInfo.MaxCount)
                 {
                     selectedItems[startDragIndex] = null;
                     selectedCounts[startDragIndex] = 0;
