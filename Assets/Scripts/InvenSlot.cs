@@ -11,14 +11,17 @@ public class InvenSlot : MonoBehaviour
     ItemInfo itemInfo;
     Inventory inventory;
     Shop shop;
+    DragUI dragUI;
 
     int indexNum;
+    static int currentIndex;
 
-    bool isDrag = false;
+    bool isDragging = false;
 
     private void Start()
     {
         inventory = Inventory.Instance;
+        dragUI = DragUI.Instance;
         indexNum = transform.GetSiblingIndex();
     }
 
@@ -26,6 +29,15 @@ public class InvenSlot : MonoBehaviour
     {
         itemInfo = info;
 
+        if (itemInfo != null)
+            OnSlot(info, count);
+
+        else
+            OffSlot();
+    }
+
+    void OnSlot(ItemInfo info, int count)
+    {
         itemImage.sprite = info.ItemImage;
         itemImage.gameObject.SetActive(true);
 
@@ -39,10 +51,8 @@ public class InvenSlot : MonoBehaviour
             itemCount.gameObject.SetActive(false);
     }
 
-    public void OffSlot()
+    void OffSlot()
     {
-        itemInfo = null;
-
         itemImage.gameObject.SetActive(false);
         itemCount.gameObject.SetActive(false);
     }
@@ -58,7 +68,7 @@ public class InvenSlot : MonoBehaviour
 
     public void GetIndexNum()
     {
-        inventory.endDragIndex = indexNum;
+        currentIndex = indexNum;
     }
 
     public void DragStart()
@@ -66,25 +76,26 @@ public class InvenSlot : MonoBehaviour
         if (shop == null)
             shop = Shop.Instance;
 
-        if (itemInfo != null && !shop.isSell && !isDrag)
+        if (itemInfo != null && !shop.isSell && !isDragging)
         {
-            inventory.SettingDragUi(indexNum);
-            isDrag = true;
+            inventory.SettingDragUI(indexNum);
+            isDragging = true;
         }
     }
 
     public void Dragging()
     {
-        if (isDrag)
-            inventory.dragUI.rectTransform.position = Input.mousePosition;
+        if (isDragging)
+            dragUI.MoveDragUI();
     }
 
     public void DragEnd()
     {
-        if (isDrag)
+        if (isDragging)
         {
-            inventory.MoveItem();
-            isDrag = false;
+            inventory.MoveItems(indexNum, currentIndex);
+            dragUI.OffDragUI();
+            isDragging = false;
         }
     }
 }

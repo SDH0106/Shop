@@ -4072,7 +4072,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1274587844
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4085,12 +4085,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2078262182}
+  m_Father: {fileID: 2024292039}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -267, y: 273}
-  m_SizeDelta: {x: -600, y: -700}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1274587845
 MonoBehaviour:
@@ -6813,6 +6813,56 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4227024369301830235, guid: 96bd771b25578a547820c814ba54bcaa, type: 3}
   m_PrefabInstance: {fileID: 2021763776}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2024292038
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2024292039}
+  - component: {fileID: 2024292040}
+  m_Layer: 5
+  m_Name: DragUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2024292039
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2024292038}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1274587844}
+  m_Father: {fileID: 2078262182}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2024292040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2024292038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4257671972fac914cba5b02e95b825f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dragItemImage: {fileID: 1274587845}
 --- !u!1001 &2062230247
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6959,7 +7009,7 @@ RectTransform:
   - {fileID: 969698033}
   - {fileID: 96881993}
   - {fileID: 1500016436}
-  - {fileID: 1274587844}
+  - {fileID: 2024292039}
   m_Father: {fileID: 1651049252}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -7057,9 +7107,7 @@ MonoBehaviour:
   - {fileID: 1159663598}
   - {fileID: 919851930}
   - {fileID: 1198936109}
-  dragUI: {fileID: 1274587845}
   crystalCount: 0
-  endDragIndex: 0
 --- !u!1 &2086490239
 GameObject:
   m_ObjectHideFlags: 0

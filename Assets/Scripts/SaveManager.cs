@@ -4,17 +4,16 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-[Serializable]
 public class SaveData
 {
     public int index;
     public string equipItem;
     public int equipItemCount;
 
-    public SaveData(int index, string equipItems, int equipItemCount)
+    public SaveData(int index, string equipItem, int equipItemCount)
     {
         this.index = index;
-        this.equipItem = equipItems;
+        this.equipItem = equipItem;
         this.equipItemCount = equipItemCount;
     }
 }
@@ -22,9 +21,9 @@ public class SaveData
 public class SaveManager : MonoBehaviour
 {
     [SerializeField] ItemInfo[] itemInfos;
-    public SaveData[] saveDatas;
-    public int crystal;
-    public int menuIndex;
+    [HideInInspector] public SaveData[] saveDatas;
+    [HideInInspector] public int saveCrystalData;
+    [HideInInspector] public int saveMenuIndexData;
     [HideInInspector] public ItemInfo[] saveItemInfos;
 
     public static SaveManager Instance;
@@ -94,8 +93,8 @@ public class SaveManager : MonoBehaviour
             SaveJson saveJson = convert as SaveJson;
 
             saveDatas = saveJson.saves;
-            crystal = saveJson.crystal;
-            menuIndex = saveJson.menuIndex;
+            saveCrystalData = saveJson.crystal;
+            saveMenuIndexData = saveJson.menuIndex;
 
             saveItemInfos = new ItemInfo[saveDatas.Length];
 
