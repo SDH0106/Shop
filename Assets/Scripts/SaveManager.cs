@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+[Serializable]
 public class SaveData
 {
     public int index;
@@ -21,7 +22,7 @@ public class SaveData
 public class SaveManager : MonoBehaviour
 {
     [SerializeField] ItemInfo[] itemInfos;
-    [HideInInspector] public SaveData[] saveDatas;
+    public SaveData[] saveDatas;
     [HideInInspector] public int saveCrystalData;
     [HideInInspector] public int saveMenuIndexData;
     [HideInInspector] public ItemInfo[] saveItemInfos;
